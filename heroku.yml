@@ -1,0 +1,5 @@
+build
+   docker:
+n     web:server.Dockerfile
+run:
+  web:npm start
