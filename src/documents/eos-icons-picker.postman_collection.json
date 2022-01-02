@@ -1,0 +1,266 @@
+{
+	"info": {
+		"_postman_id": "f25b70e5-88a1-4af9-9d9d-faa29644e603",
+		"name": "eos-icons-picker",
+		"description": "EOS ICONS PICKER BACKEND",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Home",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						""
+					]
+				},
+				"description": "Home"
+			},
+			"response": []
+		},
+		{
+			"name": "SVG single icon download",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Content-Type is SVG\", function () {",
+							"    pm.response.to.be.header(\"Content-Type\", \"image/svg+xml\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/icon/svg/download/admin",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"icon",
+						"svg",
+						"download",
+						"admin"
+					]
+				},
+				"description": "SVG Single Icon download"
+			},
+			"response": []
+		},
+		{
+			"name": "PNG single icon download",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Content-Type is PNG\", function () {",
+							"    pm.response.to.be.header(\"Content-Type\", \"image/png\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/icon/png/download/kubelet/500",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"icon",
+						"png",
+						"download",
+						"kubelet",
+						"500"
+					]
+				},
+				"description": "PNG single icon download"
+			},
+			"response": []
+		},
+		{
+			"name": "Customized PNG's",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"// check for zip file in download",
+							"// setting timeout because right now timestamp is returned before pack is created",
+							"setTimeout(() => {",
+							"    pm.sendRequest(`http://localhost:3131/download?ts=${pm.response.text()}`, (error, response) => {",
+							"//   console.log(error);",
+							"  if (error) {",
+							"    console.log(error);",
+							"  }",
+							"  pm.test('Check ZIP file', () => {",
+							"    pm.expect(error).to.equal(null);",
+							"    pm.expect(response).to.have.property('code', 200);",
+							"    pm.expect(response).to.have.property('status', 'OK');",
+							"    pm.expect(response).to.be.header(\"Content-Type\", \"application/zip\");",
+							"  });",
+							"});",
+							"}, 500)",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"icons\": [\"cluster_role\", \"pin\", \"timeout\"],\n    \"exportAs\" : \"png\",\n    \"exportSize\": \"500\",\n    \"customizationConfig\": {\"colorCode\": \"#ffe900\", \"rotateAngle\": 90, \"flip\": {\n        \"horizontal\": true,\n        \"vertical\": false\n    }}, \n    \"theme\": \"svg\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST}}/icon-customization",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"icon-customization"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Custom Font",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"// check for zip file in download",
+							"pm.sendRequest(`http://localhost:3131/download?ts=${pm.response.text()}`, (error, response) => {",
+							"//   console.log(error);",
+							"  if (error) {",
+							"    console.log(error);",
+							"  }",
+							"  pm.test('Check ZIP file', () => {",
+							"    pm.expect(error).to.equal(null);",
+							"    pm.expect(response).to.have.property('code', 200);",
+							"    pm.expect(response).to.have.property('status', 'OK');",
+							"    pm.expect(response).to.be.header(\"Content-Type\", \"application/zip\");",
+							"  });",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"icons\": [\"cluster_role\", \"pin\", \"timeout\"],\n    \"theme\": \"outlined\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST}}/iconsapi",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"iconsapi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch SvgCode",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"iconArray\": [\"1k_plus\"],\r\n    \"customizationConfig\": {\"colorCode\": \"#ffe900\", \"rotateAngle\": 90, \"flip\": {\r\n        \"horizontal\": true,\r\n        \"vertical\": false\r\n    }},\r\n    \"theme\": \"outlined\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST}}/icon/svg/svgcode",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"icon",
+						"svg",
+						"svgcode"
+					]
+				},
+				"description": "This POST request accepts a array of iconNames and returns a Array of respective SvgCode"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "HOST",
+			"value": "http://localhost:3131"
+		}
+	]
+}
